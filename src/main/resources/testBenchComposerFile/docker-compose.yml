@@ -1,5 +1,5 @@
 jetty:
-  image: testbench-demo:latest
+  image: testbench-demo
   ports:
     - "8888:8080"
 hub:
