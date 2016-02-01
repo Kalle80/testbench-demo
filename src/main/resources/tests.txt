@@ -1,0 +1,96 @@
+*** Settings ***
+Library  Selenium2Library  5  5  On Failure
+
+Suite Setup  Avaa Selain
+Suite Teardown  Sulje Selain
+Test Setup  Nollaa laskin
+#Test Teardown  Sulje Selain
+
+*** Variables ***
+${REMOTE_URL}  http://127.0.0.1/wd/hub
+${URL}  http://puppetmaster.andonsandbox.pdcloud.int.tieto.com:8888/testbench-demo-1.0-SNAPSHOT/  
+${BROWSER}  firefox 
+
+*** Test cases ***
+Simple Addition
+  [tags]  smoke  regression
+  Press Key  4
+  Press Key  +
+  Press Key  9
+  Press Key  =
+  ${result}=  Get Result
+  Should Be Equal  13.0   ${result}
+  
+Simple Subtraction
+  [tags]  smoke  regression
+  Press Key  8
+  Press Key  -
+  Press Key  2
+  Press Key  =
+  ${result}=  Get Result
+  Should Be Equal  6.0   ${result}  
+  
+Simple Multiplation
+  [tags]  smoke  regression
+  Press Key  2
+  Press Key  *
+  Press Key  2
+  Press Key  =
+  ${result}=  Get Result
+  Should Be Equal  4.0   ${result}
+  
+Simple Division
+  [tags]  smoke  regression
+  Press Key  6
+  Press Key  /
+  Press Key  2
+  Press Key  =
+  ${result}=  Get Result
+  Should Be Equal  3.0   ${result}  
+
+Complex Addition
+  [tags]  regression
+  Press Key  9
+  Press Key  +
+  Press Key  9
+  Press Key  +
+  Press Key  9
+  Press Key  =
+  ${result}=  Get Result
+  Should Be Equal  27.0   ${result}  
+
+Complex Subtraction
+  [tags]  regression
+  Press Key  9
+  Press Key  -
+  Press Key  2
+  Press Key  -
+  Press Key  9
+  Press Key  =
+  ${result}=  Get Result
+  Should Be Equal  -2.0   ${result}
+
+
+*** Keywords ***
+On Failure
+  Capture Page Screenshot
+  Get Source
+
+Nollaa laskin
+  Press Key  C
+
+Avaa Selain
+  Open Browser  ${URL}  ${BROWSER}  ${EMPTY}  ${REMOTE_URL}  #kommenttia lisää 
+  Maximize Browser Window
+  Sleep  5s
+  
+Sulje Selain
+  Close All Browsers
+
+Press Key  [Arguments]  ${key}
+  Wait Until Element is Clickable  xpath=//div[@id='button_${key}']
+  Click Element  xpath=//div[@id='button_${key}']
+  
+Get Result
+  ${value}=  Get Value  xpath=//input[@id='display']
+  [Return]  ${value}

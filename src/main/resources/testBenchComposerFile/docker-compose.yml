@@ -1,0 +1,16 @@
+jetty:
+  image: dockerregistry.andonsandbox.pdcloud.int.tieto.com:5000/testbench-demo:latest
+  ports:
+    - "8888:8080"
+hub:
+  image: selenium/hub
+  ports:
+    - "4444:4444"
+firefox:
+  image: selenium/node-firefox
+  links:
+    - hub
+chrome:
+  image: selenium/node-chrome
+  links:
+    - hub
